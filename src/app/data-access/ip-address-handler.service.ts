@@ -35,7 +35,7 @@ export class IpAddressHandlerService {
   ) {}
 
   private getCurrentIp() {
-    return this.http.get('http://api.ipify.org/?format=json').pipe(share());
+    return this.http.get('https://api.ipify.org/?format=json').pipe(share());
   }
 
   private getRemainingInfo() {
