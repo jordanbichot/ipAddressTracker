@@ -10,7 +10,7 @@ export class MapHandlerService {
   public intialZoom = 16;
   public maxZoom = 20;
   private myIcon = new Icon({
-    iconUrl: '../../assets/images/icon-location.svg',
+    iconUrl: './assets/images/icon-location.svg',
     iconSize: [46, 56],
   });
 
