@@ -29,7 +29,7 @@
 }
 
 #map {
-  height: 520px;
+  height: 744px;
   z-index: 1;
 }
 
@@ -43,14 +43,20 @@
   z-index: 2;
 }
 
+@media screen and (max-height: 801px) {
+  #map {
+    height: 520px;
+  }
+}
+
 @media screen and (max-width: 950px) {
   .ip-info {
     max-width: 80vw;
-    height: 16rem;
+    height: 18rem;
     display: flex;
     align-self: center;
     position: absolute;
-    bottom: -8rem;
+    bottom: -10rem;
     z-index: 2;
   }
 }
