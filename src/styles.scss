@@ -1,1 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
+@use "styles/reset.scss";
+@use "styles/variables.scss";
+@import url(https://unpkg.com/leaflet@1.9.3/dist/leaflet.css);
+body {
+  display: flex;
+  justify-content: center;
+  font-family: "Rubick", sans-serif;
+}

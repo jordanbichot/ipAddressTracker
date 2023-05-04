@@ -1,0 +1,21 @@
+<div class="container">
+  <h1>IP Address Tracker</h1>
+
+  <ng-container *ngIf="name.touched && name.invalid">
+    <p class="error-message">Enter a valid IP address or domain</p>
+  </ng-container>
+
+  <div class="searchbar">
+    <input
+      type="text"
+      class="searchbar__input"
+      placeholder="Search for any IP address or domain"
+      [formControl]="name"
+    />
+    <button
+      aria-label="action-button"
+      class="searchbar__button"
+      (click)="trackAddress()"
+    ></button>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+@use "../styles/variables.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.top-section {
+  position: relative;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  background-image: url(../assets/images/pattern-bg-desktop.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 280px;
+  width: 100vw;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.bottom-section {
+  grid-row-start: 2;
+  grid-row-end: 3;
+  min-height: 530px;
+  max-height: 1fr;
+  height: auto;
+  width: 100%;
+}
+
+#map {
+  height: 520px;
+  z-index: 1;
+}
+
+.ip-info {
+  max-width: 75vw;
+  height: 8rem;
+  display: flex;
+  align-self: center;
+  position: absolute;
+  bottom: -4rem;
+  z-index: 2;
+}
+
+@media screen and (max-width: 950px) {
+  .ip-info {
+    max-width: 80vw;
+    height: 16rem;
+    display: flex;
+    align-self: center;
+    position: absolute;
+    bottom: -8rem;
+    z-index: 2;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .top-section {
+    background-image: url(../assets/images/pattern-bg-mobile.png);
+  }
+}

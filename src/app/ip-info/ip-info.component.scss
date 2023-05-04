@@ -1,0 +1,70 @@
+@use "../../styles/variables.scss";
+
+.container {
+  display: flex;
+  flex-direction: row;
+  place-content: flex-start;
+  place-items: center;
+  gap: 1rem;
+  background-color: white;
+  border-radius: 1rem;
+}
+
+.pair {
+  display: flex;
+  flex-direction: column;
+  max-width: 250px;
+
+  gap: 0.5rem;
+
+  &:first-of-type {
+    padding-left: 2rem;
+  }
+  &:last-of-type {
+    padding-right: 3rem;
+  }
+}
+
+.header {
+  font-size: 0.6125rem;
+  color: variables.$color-dark-gray;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 800;
+}
+
+.values {
+  font-size: 1.25rem;
+  color: variables.$color-very-dark-gray;
+  font-weight: 700;
+}
+
+.vertical-line {
+  border: none;
+  background-color: variables.$color-dark-gray;
+  width: 1px;
+  height: 50%;
+}
+
+@media screen and (max-width: 950px) {
+  .container {
+    flex-direction: column;
+    place-content: center;
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+
+  .pair {
+    align-items: center;
+    &:first-of-type {
+      padding-left: 0rem;
+    }
+    &:last-of-type {
+      padding-right: 0rem;
+    }
+  }
+
+  .vertical-line {
+    display: none;
+  }
+}

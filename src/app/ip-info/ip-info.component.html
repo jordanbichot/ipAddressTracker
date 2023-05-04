@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="ip-address pair">
+    <p class="ip-address__text header">Ip Address</p>
+    <p class="ip-address__value values">{{ currentIpAddress$ | async }}</p>
+  </div>
+  <hr class="vertical-line" />
+  <div class="location pair">
+    <p class="location__text header">Location</p>
+    <p class="location__value values">{{ currentLocation$ | async }}</p>
+  </div>
+  <hr class="vertical-line" />
+  <div class="timezone pair">
+    <p class="timezone__text header">Timezone</p>
+    <p class="timezone__value values">{{ currentTimezone$ | async }}</p>
+  </div>
+  <hr class="vertical-line" />
+  <div class="isp pair">
+    <p class="isp__text header">Isp</p>
+    <p class="isp__value values">{{ currentIsp$ | async }}</p>
+  </div>
+</div>
