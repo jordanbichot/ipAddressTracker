@@ -17,6 +17,9 @@
 
   gap: 0.5rem;
 
+  align-self: flex-start;
+  padding-top: 2rem;
+
   &:first-of-type {
     padding-left: 2rem;
   }
@@ -53,9 +56,14 @@
     padding-left: 3rem;
     padding-right: 3rem;
   }
+  .values {
+    text-align: center;
+  }
 
   .pair {
     align-items: center;
+    padding-top: 0;
+    align-self: center;
     &:first-of-type {
       padding-left: 0rem;
     }
