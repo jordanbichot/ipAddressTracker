@@ -7,10 +7,7 @@ import { IpAddressHandlerService } from '../data-access/ip-address-handler.servi
   styleUrls: ['./ip-info.component.scss'],
 })
 export class IpInfoComponent {
-  public currentIpAddress$ = this.ipAddressHandlerService.ipAddress$;
-  public currentLocation$ = this.ipAddressHandlerService.location$;
-  public currentTimezone$ = this.ipAddressHandlerService.timezone$;
-  public currentIsp$ = this.ipAddressHandlerService.isp$;
+  public currentInfo$ = this.ipAddressHandlerService.info$;
 
   constructor(private ipAddressHandlerService: IpAddressHandlerService) {}
 }

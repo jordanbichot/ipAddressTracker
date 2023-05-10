@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, concat, share, switchMap } from 'rxjs';
+import { BehaviorSubject, concat, share, switchMap, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Ipify } from '../models/ipify';
 import { MapHandlerService } from './map-handler.service';
+import { Info } from '../models/info';
 
 @Injectable({
   providedIn: 'root',
@@ -12,22 +13,14 @@ export class IpAddressHandlerService {
     'https://geo.ipify.org/api/v2/country,city?apiKey=at_sieR1oeYORrbruJmZlLkRpBo2g0wU';
   private UrlIpSuffix = '&ipAddress=';
   private UrlDomainSuffix = '&domain=';
-  private currentIpAddress = '127.0.0.1';
 
-  private firstCall = true;
-  private urlCompleted = '';
-
-  private ipAddress = new BehaviorSubject<string>('192.212.174.101');
-  public ipAddress$ = this.ipAddress.asObservable();
-
-  private location = new BehaviorSubject<string>('Brooklyn, NY 10001');
-  public location$ = this.location.asObservable();
-
-  private timezone = new BehaviorSubject<string>('UTC - 05:00');
-  public timezone$ = this.timezone.asObservable();
-
-  private isp = new BehaviorSubject<string>('SpaceX Starlink');
-  public isp$ = this.isp.asObservable();
+  private info = new BehaviorSubject<Info>({
+    ip: '192.212.174.101',
+    location: 'Brooklyn, NY 10001',
+    timezone: 'UTC - 05:00',
+    isp: 'SpaceX Starlink',
+  });
+  public info$ = this.info.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -38,62 +31,60 @@ export class IpAddressHandlerService {
     return this.http.get('https://api.ipify.org/?format=json').pipe(share());
   }
 
-  private getRemainingInfo() {
-    return this.http.get(this.urlCompleted);
+  private getRemainingInfo(urlCompleted: string) {
+    return this.http.get<Ipify>(urlCompleted);
   }
 
   public setCurrentInfo() {
-    this.getCurrentIp().subscribe((response) => {
-      this.currentIpAddress = (response as any).ip;
-      this.urlCompleted =
-        this.UrlPrefix + this.UrlIpSuffix + this.currentIpAddress;
+    return this.getCurrentIp().pipe(
+      switchMap((firstResponse: any) => {
+        return this.getRemainingInfo(
+          this.UrlPrefix + this.UrlIpSuffix + firstResponse.ip
+        ).pipe(
+          tap((secondResponse) => {
+            this.mapHandlerService.initialCoordenates = [
+              secondResponse.location.lat,
+              secondResponse.location.lng,
+            ];
+            this.mapHandlerService.CreateMap();
 
-      this.getRemainingInfo().subscribe((response) => {
-        this.ipAddress.next((response as Ipify).ip);
-        this.location.next(
-          (response as Ipify).location.city +
-            ',' +
-            (response as Ipify).location.country +
-            ' ' +
-            (response as Ipify).location.postalCode
+            const currentLocation = `${secondResponse.location.city},${secondResponse.location.country} ${secondResponse.location.postalCode}`;
+            const currentInfo: Info = {
+              ip: secondResponse.ip,
+              location: currentLocation,
+              timezone: secondResponse.location.timezone,
+              isp: secondResponse.ip,
+            };
+            this.info.next(currentInfo);
+          })
         );
-        this.timezone.next('UTC' + (response as Ipify).location.timezone);
-        this.isp.next((response as Ipify).isp);
-
-        this.mapHandlerService.initialCoordenates = [
-          (response as Ipify).location.lat,
-          (response as Ipify).location.lng,
-        ];
-        this.mapHandlerService.CreateMap();
-      });
-    });
+      })
+    );
   }
 
   public getDomainInfo(domain: string) {
-    this.urlCompleted = this.UrlPrefix + this.UrlDomainSuffix + domain;
-    this.getInfo();
+    return this.getInfo(this.UrlPrefix + this.UrlDomainSuffix + domain);
   }
   public getIpInfo(ip: string) {
-    this.urlCompleted = this.UrlPrefix + this.UrlIpSuffix + ip;
-    this.getInfo();
+    return this.getInfo(this.UrlPrefix + this.UrlIpSuffix + ip);
   }
-  private getInfo() {
-    this.http.get(this.urlCompleted).subscribe((response) => {
-      this.ipAddress.next((response as Ipify).ip);
-      this.location.next(
-        (response as Ipify).location.city +
-          ',' +
-          (response as Ipify).location.country +
-          ' ' +
-          (response as Ipify).location.postalCode
-      );
-      this.timezone.next('UTC' + (response as Ipify).location.timezone);
-      this.isp.next((response as Ipify).isp);
+  private getInfo(urlCompleted: string) {
+    return this.http.get<Ipify>(urlCompleted).pipe(
+      tap((response) => {
+        this.mapHandlerService.setMapViewToCoordenates(
+          response.location.lat,
+          response.location.lng
+        );
 
-      this.mapHandlerService.setMapViewToCoordenates(
-        (response as Ipify).location.lat,
-        (response as Ipify).location.lng
-      );
-    });
+        const currentLocation = `${response.location.city},${response.location.country} ${response.location.postalCode}`;
+        const currentInfo: Info = {
+          ip: response.ip,
+          location: currentLocation,
+          timezone: response.location.timezone,
+          isp: response.ip,
+        };
+        this.info.next(currentInfo);
+      })
+    );
   }
 }
